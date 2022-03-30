@@ -9,7 +9,7 @@ namespace Domain.Interfaces
     public interface IUserRepository
     {
         public Task RegisterUser(User user);
-        public Task<User> GetUserById(string userId);
+        public Task<User> AuthenticateUser(string email, string password);
         public Task UpdateUserDetails(User user);
 
     }

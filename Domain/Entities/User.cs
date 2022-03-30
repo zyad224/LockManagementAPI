@@ -21,6 +21,8 @@ namespace Domain.Entities
 
         public Email Email { get; private set; }
         public string Role { get; private set; }
+        public string Password { get; private set; }
+
         [NotMapped]
         public string Jwt { get; private set; }
 
@@ -31,15 +33,19 @@ namespace Domain.Entities
         {
 
         }
-        public User(Name name, Email email, string role)
+        public User(Name name, Email email, string role, string password)
         {
-            if ((name == null) || (email == null) || (string.IsNullOrEmpty(role)))
+            if ((name == null) ||
+                (email == null) || 
+                (string.IsNullOrEmpty(role)) ||
+                (string.IsNullOrEmpty(password)))
                 throw new UserInvalidException("User Invalid Exception");
 
             UserId = UUIDGenerator.NewUUID();
             Name = name;
             Email = email;
             Role = role;
+            Password = password;
             CreatedOn = DateTime.UtcNow;
             ModifiedOn = DateTime.UtcNow;
         }
@@ -49,6 +55,14 @@ namespace Domain.Entities
             if ((string.IsNullOrEmpty(name.FirstName)) || (string.IsNullOrEmpty(name.LastName)))
                 throw new NameInvalidException("Name Invalid Exception");
             Name = name;
+            ModifiedOn = DateTime.UtcNow;
+
+        }
+        public void SetUserPassword(string password)
+        {
+            if ((string.IsNullOrEmpty(password)))
+                throw new PasswordInvalidException("Password Invalid Exception");
+            Password = password;
             ModifiedOn = DateTime.UtcNow;
 
         }

@@ -38,7 +38,7 @@ namespace Domain.Entities
             if ((string.IsNullOrEmpty(lockEvent)) ||
                 (string.IsNullOrEmpty(userId)) ||
                 (string.IsNullOrEmpty(lockId)))
-                throw new LockAuditInvalidException("LockAudit Invalid Exception");
+                throw new LockAuditInvalidException("LockAuditInvalidException");
 
             LockAuditId = UUIDGenerator.NewUUID();
             LockEvent = lockEvent;

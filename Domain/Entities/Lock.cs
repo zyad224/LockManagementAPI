@@ -28,7 +28,7 @@ namespace Domain.Entities
 
         public event EventHandler LockCommandChanged;
         [NotMapped]
-        private object _lock;
+        private static readonly object _lock = new object();
 
 
         private Lock()
@@ -57,8 +57,8 @@ namespace Domain.Entities
                 if(lockCommand != LockCommand)
                 {
                     LockCommand = lockCommand;
-                    OnLockCommandChanged(EventArgs.Empty);
                     ModifiedOn = DateTime.UtcNow;
+                    OnLockCommandChanged(EventArgs.Empty);
 
                 }
             }

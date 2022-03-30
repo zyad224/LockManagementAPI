@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IUnitOfWork:IDisposable
+    public interface IUnitOfWork
     {
         public ILockAuditRepository LockAuditRepo { get; }
         public ILockRepository LockRepo { get; }
