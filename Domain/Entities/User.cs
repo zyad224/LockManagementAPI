@@ -44,7 +44,7 @@ namespace Domain.Entities
             ModifiedOn = DateTime.UtcNow;
         }
 
-        public void UpdateUserName(Name name)
+        public void SetUserName(Name name)
         {
             if ((string.IsNullOrEmpty(name.FirstName)) || (string.IsNullOrEmpty(name.LastName)))
                 throw new NameInvalidException("Name Invalid Exception");
@@ -52,7 +52,7 @@ namespace Domain.Entities
             ModifiedOn = DateTime.UtcNow;
 
         }
-        public void UpdateUserEmail(Email email)
+        public void SetUserEmail(Email email)
         {
             if ((string.IsNullOrEmpty(email.Value)) || (!email.Value.Contains("@")))
                 throw new EmailInvalidException("Email Invalid Exception");
@@ -60,7 +60,7 @@ namespace Domain.Entities
             ModifiedOn = DateTime.UtcNow;
 
         }
-        public void UpdateUserRole(string role)
+        public void SetUserRole(string role)
         {
             if ((string.IsNullOrEmpty(role)))
                 throw new RoleInvalidException("Role Invalid Exception");
@@ -69,7 +69,7 @@ namespace Domain.Entities
 
         }
 
-        public void SetJwt(string jwt)
+        public void SetUserJwt(string jwt)
         {
             if ((string.IsNullOrEmpty(jwt)))
                 throw new UserInvalidJwt("JWT Invalid Exception");
