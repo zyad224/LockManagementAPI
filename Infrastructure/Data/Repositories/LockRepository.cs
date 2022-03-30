@@ -24,7 +24,16 @@ namespace Infrastructure.Data.Repositories
             if (string.IsNullOrEmpty(lockId))
                 throw new LockInvalidException("LockInvalidException");
 
-            return await _dbApiContext.Locks.Where(l => l.LockId == lockId).FirstOrDefaultAsync();
+            var lockdb = await _dbApiContext.Locks
+                        .Where(l => l.LockId == lockId)
+                        .Include(l=>l.User)
+                        .Include(l=>l.LockAudits)
+                        .FirstOrDefaultAsync();
+
+            if (lockdb == null)
+                throw new LockInvalidException("LockDoesNotExistException");
+
+            return lockdb;
         }
 
         public async Task RegisterLock(Lock lockk)
@@ -46,6 +55,9 @@ namespace Infrastructure.Data.Repositories
                 throw new LockInvalidException("LockInvalidException");
 
             var lockdb = await _dbApiContext.Locks.Where(l => l.LockId == lockk.LockId).FirstOrDefaultAsync();
+
+            if (lockdb == null)
+                throw new LockInvalidException("LockDoesNotExistException");
 
             lockdb.SetLockDesctiption(lockk.Description);
             lockdb.SetLockCommand(lockk.LockCommand);

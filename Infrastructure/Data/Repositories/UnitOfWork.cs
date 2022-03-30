@@ -24,10 +24,6 @@ namespace Infrastructure.Data.Repositories
         {
             return await _dbApiContext.SaveChangesAsync();
         }
-
-        public void Dispose()
-        {
-            _dbApiContext.Dispose();
-        }
+   
     }
 }

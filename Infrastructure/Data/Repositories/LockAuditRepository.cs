@@ -22,14 +22,23 @@ namespace Infrastructure.Data.Repositories
         public async Task<List<LockAudit>> GetLockAuditsByLockId(string lockId, int pageNumber = 1, int pageSize = 10)
         {
             if (string.IsNullOrEmpty(lockId))
-                throw new LockInvalidException("LockInvalidException");
+                throw new LockAuditInvalidException("LockIdInvalidException");
 
-            return await _dbApiContext.LockAudits
-           .OrderBy(on => on.CreatedOn)
+            var lockAudits = await _dbApiContext.LockAudits
+           .Include(la=> la.User)
+           .Include(la=>la.Lock)
+           .Where(la => la.LockId == lockId)
+           .OrderBy(la => la.CreatedOn)
            .Skip((pageNumber - 1) * pageSize)
            .Take(pageSize)
-           .Where(la => la.LockId == lockId)
            .ToListAsync();
+
+            if(lockAudits == null)
+                new LockAuditInvalidException("NoLockAuditsForThisLockInvalidException");
+
+            return lockAudits;
+
+
         }
 
         public async Task RegisterLockAudit(LockAudit lockAudit)

@@ -19,20 +19,28 @@ namespace Infrastructure.Data.Repositories
             _dbApiContext = dbApiContext;
 
         }
-        public async Task<User> GetUserById(string userId)
+        public async Task<User> AuthenticateUser(string email, string password)
         {
-            if (string.IsNullOrEmpty(userId))
-                throw new UserInvalidException("UserInvalidException");
+            if (string.IsNullOrEmpty(email) || (string.IsNullOrEmpty(password)))
+                throw new UserInvalidException("UserCredentialsInvalidException");
 
-            return await _dbApiContext.Users.Where(u => u.UserId == userId).FirstOrDefaultAsync();
+            var userdb = await _dbApiContext.Users
+                         .Where(user => user.Email.Value == email && user.Password == password)          
+                         .FirstOrDefaultAsync();
+
+            if (userdb == null)
+                throw new UserInvalidException("UserNotExistInvalidException");
+
+            return userdb;
+
         }
 
         public async Task RegisterUser(User user)
         {
             if (user == null)
-                throw new UserInvalidException("UserInvalidException");
+                throw new UserInvalidException("UserObjectInvalidException");
 
-            var userdb = await _dbApiContext.Users.Where(u => u.UserId == user.UserId).FirstOrDefaultAsync();
+            var userdb = await _dbApiContext.Users.Where(u => u.Email.Value == user.Email.Value).FirstOrDefaultAsync();
 
             if(userdb != null)
                 throw new UserInvalidException("UserAlreadyExistException");
@@ -47,6 +55,8 @@ namespace Infrastructure.Data.Repositories
             
             var userdb = await _dbApiContext.Users.Where(u => u.UserId == user.UserId).FirstOrDefaultAsync();
 
+            if (userdb == null)
+                throw new UserInvalidException("UserDoesNotExistException");
 
             userdb.SetUserEmail(user.Email);
             userdb.SetUserName(user.Name);
