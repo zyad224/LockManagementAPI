@@ -48,19 +48,20 @@ namespace Infrastructure.Data.Repositories
             await _dbApiContext.Users.AddAsync(user);
         }
 
-        public async Task UpdateUserDetails(User user)
+
+        public async Task<User> GetUserById(string userId)
         {
-            if (user == null)
-                throw new UserInvalidException("UserInvalidException");
-            
-            var userdb = await _dbApiContext.Users.Where(u => u.UserId == user.UserId).FirstOrDefaultAsync();
+            if (string.IsNullOrEmpty(userId))
+                throw new UserInvalidException("UserIdInvalidException");
+
+            var userdb = await _dbApiContext.Users
+                        .Where(u => u.UserId == userId)                    
+                        .FirstOrDefaultAsync();
 
             if (userdb == null)
-                throw new UserInvalidException("UserDoesNotExistException");
+                throw new UserInvalidException("UserNotExistInvalidException");
 
-            userdb.SetUserEmail(user.Email);
-            userdb.SetUserName(user.Name);
-            userdb.SetUserRole(user.Role);
+            return userdb;
         }
     }
 }

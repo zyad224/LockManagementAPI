@@ -10,7 +10,7 @@ namespace Infrastructure.Data
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Lock> Locks { get; set; }
-        public DbSet<LockAudit> LockAudits { get; set; }
+        public DbSet<Audit> Audits { get; set; }
 
     }
 }

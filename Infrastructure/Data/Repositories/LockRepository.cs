@@ -25,9 +25,8 @@ namespace Infrastructure.Data.Repositories
                 throw new LockInvalidException("LockInvalidException");
 
             var lockdb = await _dbApiContext.Locks
-                        .Where(l => l.LockId == lockId)
                         .Include(l=>l.User)
-                        .Include(l=>l.LockAudits)
+                        .Where(l => l.LockId == lockId)                     
                         .FirstOrDefaultAsync();
 
             if (lockdb == null)
@@ -49,19 +48,6 @@ namespace Infrastructure.Data.Repositories
             await _dbApiContext.Locks.AddAsync(lockk);
         }
 
-        public async Task UpdateLockDetails(Lock lockk)
-        {
-            if (lockk == null)
-                throw new LockInvalidException("LockInvalidException");
-
-            var lockdb = await _dbApiContext.Locks.Where(l => l.LockId == lockk.LockId).FirstOrDefaultAsync();
-
-            if (lockdb == null)
-                throw new LockInvalidException("LockDoesNotExistException");
-
-            lockdb.SetLockDesctiption(lockk.Description);
-            lockdb.SetLockCommand(lockk.LockCommand);
-            lockdb.SetHardwareId(lockk.HardwareId);
-        }
+      
     }
 }

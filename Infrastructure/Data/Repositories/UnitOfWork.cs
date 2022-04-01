@@ -9,14 +9,14 @@ namespace Infrastructure.Data.Repositories
     public class UnitOfWork: IUnitOfWork
     {
         private readonly DbApiContext _dbApiContext;
-        public ILockAuditRepository LockAuditRepo { get; }
+        public IAuditRepository AuditRepo { get; }
         public ILockRepository LockRepo { get; }
         public IUserRepository UserRepo { get; }
 
-        public UnitOfWork(DbApiContext dbApiContext, ILockAuditRepository lockAuditRepo, ILockRepository lockRepo, IUserRepository userRepo)
+        public UnitOfWork(DbApiContext dbApiContext, IAuditRepository auditRepo, ILockRepository lockRepo, IUserRepository userRepo)
         {
             _dbApiContext = dbApiContext;
-            LockAuditRepo = lockAuditRepo;
+            AuditRepo = auditRepo;
             LockRepo = lockRepo;
             UserRepo = userRepo;
         }
