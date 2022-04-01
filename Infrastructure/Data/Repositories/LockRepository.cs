@@ -30,7 +30,7 @@ namespace Infrastructure.Data.Repositories
                         .FirstOrDefaultAsync();
 
             if (lockdb == null)
-                throw new LockInvalidException("LockDoesNotExistException");
+                throw new LockNotFoundException("LockDoesNotExistException");
 
             return lockdb;
         }

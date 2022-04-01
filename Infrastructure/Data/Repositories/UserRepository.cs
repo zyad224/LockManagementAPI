@@ -22,14 +22,14 @@ namespace Infrastructure.Data.Repositories
         public async Task<User> AuthenticateUser(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || (string.IsNullOrEmpty(password)))
-                throw new UserInvalidException("UserCredentialsInvalidException");
+                throw new UserInvalidException("UserInvalidException");
 
             var userdb = await _dbApiContext.Users
                          .Where(user => user.Email.Value == email && user.Password == password)          
                          .FirstOrDefaultAsync();
 
             if (userdb == null)
-                throw new UserInvalidException("UserNotExistInvalidException");
+                throw new UserNotFoundException("UserNotFoundException");
 
             return userdb;
 
@@ -38,7 +38,7 @@ namespace Infrastructure.Data.Repositories
         public async Task RegisterUser(User user)
         {
             if (user == null)
-                throw new UserInvalidException("UserObjectInvalidException");
+                throw new UserInvalidException("UserInvalidException");
 
             var userdb = await _dbApiContext.Users.Where(u => u.Email.Value == user.Email.Value).FirstOrDefaultAsync();
 
@@ -52,14 +52,14 @@ namespace Infrastructure.Data.Repositories
         public async Task<User> GetUserById(string userId)
         {
             if (string.IsNullOrEmpty(userId))
-                throw new UserInvalidException("UserIdInvalidException");
+                throw new UserInvalidException("UserInvalidException");
 
             var userdb = await _dbApiContext.Users
                         .Where(u => u.UserId == userId)                    
                         .FirstOrDefaultAsync();
 
             if (userdb == null)
-                throw new UserInvalidException("UserNotExistInvalidException");
+                throw new UserNotFoundException("UserNotFoundException");
 
             return userdb;
         }
