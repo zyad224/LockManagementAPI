@@ -35,8 +35,7 @@ namespace LockManagementAPI.Profiles
               ));
             CreateMap<Lock, LockAddRespDto>();
 
-            /////Audits Mapping
-            CreateMap<Audit, AuditRespDto>();
+          
 
         }
     }

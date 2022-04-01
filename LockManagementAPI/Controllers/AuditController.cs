@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using Domain.Interfaces;
 using LockManagementAPI.Dtos.AuditsDto;
 using LockManagementAPI.Services.Interfaces;
@@ -27,11 +28,11 @@ namespace LockManagementAPI.Controllers
 
         [HttpGet]
         [Route("Audits")]
-        public async Task<ActionResult<List<AuditRespDto>>> Audits([FromQuery] AuditReqDto auditReqDto)
+        public async Task<ActionResult<List<Audit>>> Audits([FromQuery] AuditReqDto auditReqDto)
         {
             var audits = await _auditService.GetAuditDetails(auditReqDto.AuditObjectId,auditReqDto.PageNumber,auditReqDto.PageSize);
-            var auditRespDto = _mapper.Map<AuditRespDto>(audits);
-            return Ok(auditRespDto);
+
+            return Ok(audits);
 
         }
     }
