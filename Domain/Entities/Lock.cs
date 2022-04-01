@@ -1,4 +1,5 @@
 ﻿using Domain.Base;
+using Domain.DomainEvents;
 using Domain.DomainExceptions;
 using Domain.Shared;
 using System;
@@ -17,16 +18,15 @@ namespace Domain.Entities
         public string LockId { get; private set; }
         public string Description { get; private set; }
         public bool LockCommand { get; private set; }
+        [Required(ErrorMessage = "HardwareId is Required"), MaxLength(60)]
         public string HardwareId { get; private set; }
 
         [ForeignKey("UserId")]
         [Required(ErrorMessage = "UserId is Required"), MaxLength(60)]
         public string UserId { get; private set; }
         public virtual User User { get; private set; }
-        public virtual IEnumerable<LockAudit> LockAudits { get; }
 
-
-        public event EventHandler LockCommandChanged;
+        public event EventHandler<DomainEventArgs> LockCommandChanged;
         [NotMapped]
         private static readonly object _lock = new object();
 
@@ -58,7 +58,11 @@ namespace Domain.Entities
                 {
                     LockCommand = lockCommand;
                     ModifiedOn = DateTime.UtcNow;
-                    OnLockCommandChanged(EventArgs.Empty);
+                    OnLockCommandChanged
+                        (new DomainEventArgs 
+                        { ChangedDomainPropertyName = nameof(LockCommand),
+                          ChangedDomainPropertyNewValue = LockCommand.ToString()
+                        });
 
                 }
             }
@@ -82,9 +86,9 @@ namespace Domain.Entities
 
         }
 
-        protected virtual void OnLockCommandChanged(EventArgs e)
+        protected virtual void OnLockCommandChanged(DomainEventArgs eventArgs)
         {
-            LockCommandChanged?.Invoke(this, e);
+            LockCommandChanged?.Invoke(this, eventArgs);
         }
     }
 }

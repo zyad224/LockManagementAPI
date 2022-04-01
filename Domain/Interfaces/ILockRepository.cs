@@ -10,7 +10,6 @@ namespace Domain.Interfaces
     {
         public Task RegisterLock(Lock lockk);
         public Task<Lock> GetLockById(string lockId);
-        public Task UpdateLockDetails(Lock lockk);
 
     }
 }
