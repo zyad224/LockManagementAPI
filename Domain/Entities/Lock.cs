@@ -58,12 +58,7 @@ namespace Domain.Entities
                 {
                     LockCommand = lockCommand;
                     ModifiedOn = DateTime.UtcNow;
-                    OnLockCommandChanged
-                        (new DomainEventArgs 
-                        { ChangedDomainPropertyName = nameof(LockCommand),
-                          ChangedDomainPropertyNewValue = LockCommand.ToString()
-                        });
-
+                    OnLockCommandChanged();                     
                 }
             }
             
@@ -86,8 +81,16 @@ namespace Domain.Entities
 
         }
 
-        protected virtual void OnLockCommandChanged(DomainEventArgs eventArgs)
+        private void OnLockCommandChanged()
         {
+            var eventArgs = new DomainEventArgs
+            {
+               DomainObject = this.GetType().ToString(),
+               DomainObjectId = this.LockId,
+               ChangedDomainPropertyName = nameof(LockCommand),
+               ChangedDomainPropertyNewValue = LockCommand.ToString()
+            };
+
             LockCommandChanged?.Invoke(this, eventArgs);
         }
     }

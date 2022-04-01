@@ -42,8 +42,11 @@ namespace LockManagementAPI.Services.Interfaces
 
         private void lockk_LockCommandChanged(object sender, DomainEventArgs eventArgs)
         {
-            var lockk = (Lock)sender;
-            var audit = new Audit(lockk.GetType().ToString(), lockk.LockId, eventArgs.ChangedDomainPropertyName, eventArgs.ChangedDomainPropertyNewValue);
+            var audit = new Audit(eventArgs.DomainObject,
+                                  eventArgs.DomainObjectId,
+                                  eventArgs.ChangedDomainPropertyName,
+                                  eventArgs.ChangedDomainPropertyNewValue);
+
             _auditService.RegisterAudit(audit);
         }
 
