@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using LockManagementAPI.Dtos.AuditsDto;
 using LockManagementAPI.Dtos.LocksDto;
 using LockManagementAPI.Dtos.UserDtos;
 using System;
@@ -13,9 +14,8 @@ namespace LockManagementAPI.Profiles
     {
         public AutoMapperProfile()
         {
-            CreateMap<UserRegisterReqDto, User>();
 
-
+            ///User Mapping
             CreateMap<UserRegisterReqDto, User>()
                 .ConstructUsing(x => new User
                 (new Domain.ValueObjects.Name(x.FirstName,x.LastName),
@@ -24,17 +24,20 @@ namespace LockManagementAPI.Profiles
                  x.Password
                 ));
             CreateMap<User, UserLoginRespDto>();
-
-            CreateMap<Lock, LockResponseDto>();
             CreateMap<User, UserRegisterRespDto>();
 
-             /*CreateMap<ProductTypeDto, ProductType>();
-             CreateMap<ProductTypeQuantityDto, ProductTypeQuantity>();
-             CreateMap<OrderRequestDto, Order>();
+            ////Lock Mapping
+            CreateMap<LockAddReqDto, Lock>()
+              .ConstructUsing(x => new Lock
+              (x.UserId,
+               x.Description,
+               x.HardwareId
+              ));
+            CreateMap<Lock, LockAddRespDto>();
 
-             CreateMap<ProductType, ProductTypeDto>();
-             CreateMap<ProductTypeQuantity, ProductTypeQuantityDto>();
-             CreateMap<Order, OrderResponseDto>();*/
+            /////Audits Mapping
+            CreateMap<Audit, AuditRespDto>();
+
         }
     }
 }

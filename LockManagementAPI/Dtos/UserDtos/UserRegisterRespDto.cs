@@ -9,13 +9,10 @@ namespace LockManagementAPI.Dtos.UserDtos
 {
     public class UserRegisterRespDto
     {
-        public string UserId { get; set; }
-
-        public Name Name { get; set; }
-
-        public Email Email { get; set; }
+        public string UserId { get; set; }      
         public string Role { get; set; }
-
+        public DateTime CreatedOn { get; set; }
+        public DateTime ModifiedOn { get; set; }
 
     }
 }

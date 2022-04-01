@@ -10,6 +10,6 @@ namespace LockManagementAPI.Services.Interfaces
     {
         public Task RegisterUser(User user);
         public Task<User> AuthenticateUser(string email, string password);
-        public Task UpdateUserDetails(User user);
+        public Task<User> GetUserById(string userId);
     }
 }

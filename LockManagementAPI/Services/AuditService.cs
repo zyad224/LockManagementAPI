@@ -17,13 +17,15 @@ namespace LockManagementAPI.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task RegisterAudit(object obj)
-        {
-            if (obj == null)
-                throw new AuditInvalidException("ObjectToRegisterIsNull");
 
-            if (obj.GetType() == typeof(LockAudit))
-                await _unitOfWork.LockAuditRepo.RegisterLockAudit((LockAudit)obj);
+        public async Task<List<Audit>> GetAuditDetails(string auditObjectId, int pageNumber = 1, int pageSize = 10)
+        {
+            return await _unitOfWork.AuditRepo.GetAuditDetails(auditObjectId, pageNumber, pageSize);
+        }
+
+        public async Task RegisterAudit(Audit audit)
+        {
+            await _unitOfWork.AuditRepo.RegisterAudit(audit);
         }
     }
 }

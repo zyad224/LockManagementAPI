@@ -1,4 +1,5 @@
-﻿using Domain.DomainExceptions;
+﻿using Domain.DomainEvents;
+using Domain.DomainExceptions;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Shared;
@@ -12,10 +13,12 @@ namespace LockManagementAPI.Services.Interfaces
     public class LockService : ILockService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuditService _auditService;
 
-        public LockService(IUnitOfWork unitOfWork)
+        public LockService(IUnitOfWork unitOfWork, IAuditService auditService)
         {
             _unitOfWork = unitOfWork;
+            _auditService = auditService;
         }
 
         public async Task<Lock> GetLockById(string lockId)
@@ -28,42 +31,20 @@ namespace LockManagementAPI.Services.Interfaces
             await _unitOfWork.LockRepo.RegisterLock(lockk);
         }
 
-        public async Task UpdateLockDetails(Lock lockk)
-        {
-            await _unitOfWork.LockRepo.UpdateLockDetails(lockk);
-        }
-
-        public async Task<(Lock lockk, Command oldLockCommand, Command currentLockCommand)> LockCommand(Lock lockk, Command newLockCommand)
+        public void LockCommand(Lock lockk, bool command)
         {
             if(lockk == null)
-                throw new LockInvalidException("LockInvalidException");
-
-            if(await _unitOfWork.LockRepo.GetLockById(lockk.LockId) == null)
                 throw new LockInvalidException("LockDoesNotExistException");
-
-            var oldLockCommand = lockk.LockCommand;
-
+            lockk.LockCommandChanged -= lockk_LockCommandChanged;
             lockk.LockCommandChanged += lockk_LockCommandChanged;
-
-            if (newLockCommand == Command.Lock)
-                lockk.SetLockCommand(newLockCommand.GetCommand());
-
-            else if (newLockCommand == Command.Unlock)
-                lockk.SetLockCommand(newLockCommand.GetCommand());
-
-            return (lockk,
-                   (oldLockCommand == true? Command.Unlock: Command.Lock),
-                   (lockk.LockCommand == true ? Command.Unlock : Command.Lock));
+            lockk.SetLockCommand(command);
         }
 
-        public async Task<List<LockAudit>> GetLockAudits(string lockId, int pageNumber = 1, int pageSize = 10)
+        private void lockk_LockCommandChanged(object sender, DomainEventArgs eventArgs)
         {
-            return await _unitOfWork.LockAuditRepo.GetLockAuditsByLockId(lockId, pageNumber, pageSize);
-        }
-
-        private void lockk_LockCommandChanged(object sender, EventArgs e)
-        {
-           // can call another services (SQS, SNS, Lambda)
+            var lockk = (Lock)sender;
+            var audit = new Audit(lockk.GetType().ToString(), lockk.LockId, eventArgs.ChangedDomainPropertyName, eventArgs.ChangedDomainPropertyNewValue);
+            _auditService.RegisterAudit(audit);
         }
 
       

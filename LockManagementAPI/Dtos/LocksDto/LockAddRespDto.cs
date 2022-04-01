@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 
 namespace LockManagementAPI.Dtos.LocksDto
 {
-    public class LockResponseDto
+    public class LockAddRespDto
     {
         public string LockId { get; set; }
-        public string Description { get; set; }
-        public bool LockCommand { get; set; }
-        public string HardwareId { get; set; }     
         public string UserId { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime ModifiedOn { get; set; }
+
+
     }
 }

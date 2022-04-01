@@ -27,9 +27,10 @@ namespace LockManagementAPI.Services
            await _unitOfWork.UserRepo.RegisterUser(user);
         }
 
-        public async Task UpdateUserDetails(User user)
+        public async Task<User> GetUserById(string userId)
         {
-            await _unitOfWork.UserRepo.UpdateUserDetails(user);
+            return await _unitOfWork.UserRepo.GetUserById(userId);
         }
+
     }
 }
