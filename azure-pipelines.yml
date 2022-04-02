@@ -10,7 +10,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '62879bc1-e2ca-450c-b807-c57d5c2c4232'
+  dockerRegistryServiceConnection: '4f449d1b-66df-4a7e-a7f4-28563108b40a'
   imageRepository: 'lockApiImage'
   containerRegistry: 'azureorderapicr.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
