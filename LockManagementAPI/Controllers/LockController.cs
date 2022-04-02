@@ -33,6 +33,24 @@ namespace LockManagementAPI.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Add Lock (For Admins with JWTs ONLY).
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     POST api/Lock/AddLock
+        ///     {        
+        ///       "Description": "This lock for company door",
+        ///       "HardwareId": "123",
+        ///       "UserId":"10010"
+        ///     }
+        /// </remarks>
+        /// <returns> LockAddRespDto </returns>
+        /// /// <response code="200"> LockAddRespDto </response>
+        /// <response code="400">LockInvalidException</response> 
+        /// <response code="401">Unauthorized</response> 
+        // POST: api/Lock/AddLock
         [Authorize(Roles = UserRole.Admin)]
         [HttpPost]
         [Route("AddLock")]
@@ -46,6 +64,25 @@ namespace LockManagementAPI.Controllers
             return Ok(lockResponseDtoDto);
 
         }
+
+        /// <summary>
+        /// LockCommand (For ALL Users with JWTs).
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     POST api/Lock/LockCommand
+        ///     {        
+        ///       "LockId": "101",
+        ///       "UserId": "10010",
+        ///       "LockCommand":"true"
+        ///     }
+        /// </remarks>
+        /// 
+        /// /// <response code="200"> Successfully Locked/Unlocked </response>
+        /// <response code="400">LockInvalidException</response> 
+        /// <response code="404">LockNotFoundException</response> 
+        // POST: api/Lock/LockCommand
         [Authorize]
         [HttpPost]
         [Route("LockCommand")]

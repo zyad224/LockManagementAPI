@@ -26,6 +26,24 @@ namespace LockManagementAPI.Controllers
             _auditService = auditService;
         }
 
+
+        /// <summary>
+        /// Get Audits.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     GET api/Audit/Audits
+        ///     {        
+        ///       "AuditObjectId": "LockId",
+        ///       "PageNumber": "1",
+        ///       "PageSize":"10"
+        ///     }
+        /// </remarks>
+        /// <returns> LockAddRespDto </returns>
+        /// /// <response code="200"> List of Audits </response>
+        /// <response code="400">AuditInvalidException</response> 
+        // GET: api/Audit/Audits
         [HttpGet]
         [Route("Audits")]
         public async Task<ActionResult<List<Audit>>> Audits([FromQuery] AuditReqDto auditReqDto)

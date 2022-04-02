@@ -30,6 +30,28 @@ namespace LockManagementAPI.Controllers
             _unitOfWork = unitOfWork;
         }
 
+
+        /// <summary>
+        /// Register New User.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     POST api/User/Register
+        ///     {        
+        ///       "FirstName": "Zyad",
+        ///       "LastName":"Ab",
+        ///       "Email":"z@gmail.com"
+        ///       "Password": "123",
+        ///       "Role":"Admin"
+        ///     }
+        /// </remarks>
+        /// <returns> UserRegisterRespDto </returns>
+        /// /// <response code="200"> UserRegisterRespDto</response>
+        /// <response code="400">UserInvalidException</response> 
+        ///
+        ///  
+        // POST: api/User/Register
         [HttpPost]
         [Route("Register")]
         public async Task<ActionResult<UserRegisterRespDto>> Register([FromBody] UserRegisterReqDto userRegisterReqDto)
@@ -43,6 +65,23 @@ namespace LockManagementAPI.Controllers
 
         }
 
+        /// <summary>
+        /// User Login.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     POST api/User/Login
+        ///     {        
+        ///       "Email": "z@gmail.com",
+        ///       "Password": "123"
+        ///     }
+        /// </remarks>
+        /// <returns> UserLoginRespDto </returns>
+        /// /// <response code="200"> UserLoginRespDto </response>
+        /// <response code="400">UserInvalidException</response> 
+        /// <response code="404">UserNotFoundException</response> 
+        // POST: api/User/Login
         [HttpPost]
         [Route("Login")]
         public async Task<ActionResult<UserLoginRespDto>> Login([FromBody] UserLoginReqDto userLoginReqDto)
