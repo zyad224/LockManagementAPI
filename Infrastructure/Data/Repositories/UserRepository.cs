@@ -1,6 +1,7 @@
 ﻿using Domain.DomainExceptions;
 using Domain.Entities;
 using Domain.Interfaces;
+using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,13 @@ namespace Infrastructure.Data.Repositories
             _dbApiContext = dbApiContext;
 
         }
-        public async Task<User> AuthenticateUser(string email, string password)
+        public async Task<User> AuthenticateUser(Email email, string password)
         {
-            if (string.IsNullOrEmpty(email) || (string.IsNullOrEmpty(password)))
+            if (email == null || (string.IsNullOrEmpty(password)))
                 throw new UserInvalidException("UserInvalidException");
 
             var userdb = await _dbApiContext.Users
-                         .Where(user => user.Email.Value == email && user.Password == password)          
+                         .Where(user => user.Email.Value == email.Value && user.Password == password)          
                          .FirstOrDefaultAsync();
 
             if (userdb == null)
@@ -55,7 +56,8 @@ namespace Infrastructure.Data.Repositories
                 throw new UserInvalidException("UserInvalidException");
 
             var userdb = await _dbApiContext.Users
-                        .Where(u => u.UserId == userId)                    
+                        .Where(u => u.UserId == userId) 
+                        .Include(u => u.Locks)
                         .FirstOrDefaultAsync();
 
             if (userdb == null)

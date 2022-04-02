@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace LockManagementAPI.Services.Interfaces
     public interface IUserService
     {
         public Task RegisterUser(User user);
-        public Task<User> AuthenticateUser(string email, string password);
+        public Task<User> AuthenticateUser(Email email, string password);
         public Task<User> GetUserById(string userId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Domain.ValueObjects;
 using LockManagementAPI.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace LockManagementAPI.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<User> AuthenticateUser(string email, string password)
+        public async Task<User> AuthenticateUser(Email email, string password)
         {
             return await _unitOfWork.UserRepo.AuthenticateUser(email,password);
 

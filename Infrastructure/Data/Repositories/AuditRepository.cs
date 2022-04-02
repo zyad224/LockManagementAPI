@@ -31,8 +31,8 @@ namespace Infrastructure.Data.Repositories
            .Take(pageSize)
            .ToListAsync();
 
-            if(audits == null)
-                new AuditInvalidException("NoAuditsForThisObjectInvalidException");
+            if((audits == null) || (audits.Count == 0))
+                throw new AuditInvalidException("NoAuditsForThisObjectInvalidException");
 
             return audits;
         }

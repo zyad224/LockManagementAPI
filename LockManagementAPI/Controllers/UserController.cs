@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Domain.ValueObjects;
 using LockManagementAPI.Dtos.UserDtos;
 using LockManagementAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -47,7 +48,7 @@ namespace LockManagementAPI.Controllers
         public async Task<ActionResult<UserLoginRespDto>> Login([FromBody] UserLoginReqDto userLoginReqDto)
         {
 
-            var user = await _userService.AuthenticateUser(userLoginReqDto.Email, userLoginReqDto.Password);
+            var user = await _userService.AuthenticateUser(new Email(userLoginReqDto.Email), userLoginReqDto.Password);
             var jwt = _jwtService.GenerateJWT(user);
             user.SetUserJwt(jwt);
             var userLoginRespDto = _mapper.Map<UserLoginRespDto>(user);
