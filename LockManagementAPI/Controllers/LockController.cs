@@ -50,6 +50,7 @@ namespace LockManagementAPI.Controllers
         /// /// <response code="200"> LockAddRespDto </response>
         /// <response code="400">LockInvalidException</response> 
         /// <response code="401">Unauthorized</response> 
+        /// <response code="403">Forbidden</response> 
         // POST: api/Lock/AddLock
         [Authorize(Roles = UserRole.Admin)]
         [HttpPost]
@@ -81,6 +82,7 @@ namespace LockManagementAPI.Controllers
         /// 
         /// /// <response code="200"> Successfully Locked/Unlocked </response>
         /// <response code="400">LockInvalidException</response> 
+        /// <response code="401">Unauthorized</response> 
         /// <response code="404">LockNotFoundException</response> 
         // POST: api/Lock/LockCommand
         [Authorize]
