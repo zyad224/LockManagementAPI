@@ -186,6 +186,101 @@ namespace IntegrationTests
 
 
         }
+
+
+        [Test]
+        public async Task LockCommand_NotExistingLock_Throws_LockNotFoundException_BadRequest()
+        {
+
+            //Arrange
+            var userController = new UserController(_userService, _jwtService, _mapper, _unitOfWork);
+            var lockController = new LockController(_lockService, _userService, _mapper, _unitOfWork);
+
+            UserRegisterReqDto userRegisterReqDto = new UserRegisterReqDto
+            {
+                FirstName = "Zeyad",
+                LastName = "Ab",
+                Email = "z@gmail.com",
+                Password = "123"
+            };
+
+
+            //Act
+            var userRegisterResult = await userController.Register(userRegisterReqDto);
+            var userRegisterRespDto = ((userRegisterResult.Result as ObjectResult).Value) as UserRegisterRespDto;
+
+
+            LockAddReqDto lockk = new LockAddReqDto
+            {
+                Description = "description1",
+                HardwareId = "hardwareId1",
+                UserId = userRegisterRespDto.UserId
+
+            };
+
+            var result = await lockController.AddLock(lockk);
+
+            LockCommandReqDto lockCommandReqDto = new LockCommandReqDto
+            {
+                LockId = "NotExistingLockId",
+                UserId = userRegisterRespDto.UserId,
+                LockCommand = true
+            };
+
+
+            //Assert
+            Assert.ThrowsAsync<LockNotFoundException>(() => lockController.LockCommand(lockCommandReqDto));
+
+
+
+        }
+
+        [Test]
+        public async Task LockCommand_ValidLock_ValidUser__Returns_OK()
+        {
+
+            //Arrange
+            var userController = new UserController(_userService, _jwtService, _mapper, _unitOfWork);
+            var lockController = new LockController(_lockService, _userService, _mapper, _unitOfWork);
+
+            UserRegisterReqDto userRegisterReqDto = new UserRegisterReqDto
+            {
+                FirstName = "Zeyad",
+                LastName = "Ab",
+                Email = "z@gmail.com",
+                Password = "123"
+            };
+
+
+            //Act
+            var userRegisterResult = await userController.Register(userRegisterReqDto);
+            var userRegisterRespDto = ((userRegisterResult.Result as ObjectResult).Value) as UserRegisterRespDto;
+
+
+            LockAddReqDto lockk = new LockAddReqDto
+            {
+                Description = "description1",
+                HardwareId = "hardwareId1",
+                UserId = userRegisterRespDto.UserId
+
+            };
+
+            var lockAddResult = await lockController.AddLock(lockk);
+
+            LockCommandReqDto lockCommandReqDto = new LockCommandReqDto
+            {
+                LockId = (((lockAddResult.Result as ObjectResult).Value) as LockAddRespDto).LockId,
+                UserId = userRegisterRespDto.UserId,
+                LockCommand = true
+            };
+
+            var result = await lockController.LockCommand(lockCommandReqDto);
+            var resultStatusCode = (result.Result as OkResult).StatusCode;
+
+            //Assert
+            Assert.IsTrue(resultStatusCode == 200);
+
+        }
     }
 }
 

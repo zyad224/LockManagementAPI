@@ -49,7 +49,7 @@ namespace LockManagementAPI.Controllers
         [Authorize]
         [HttpPost]
         [Route("LockCommand")]
-        public async Task<ActionResult> LockCommand([FromBody] LockCommandReqDto lockCommandReqDto)
+        public async Task<ActionResult<LockCommandReqDto>> LockCommand([FromBody] LockCommandReqDto lockCommandReqDto)
         {
             var lockk =  await _lockService.GetLockById(lockCommandReqDto.LockId);
 

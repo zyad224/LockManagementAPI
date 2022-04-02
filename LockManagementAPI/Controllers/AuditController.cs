@@ -31,9 +31,7 @@ namespace LockManagementAPI.Controllers
         public async Task<ActionResult<List<Audit>>> Audits([FromQuery] AuditReqDto auditReqDto)
         {
             var audits = await _auditService.GetAuditDetails(auditReqDto.AuditObjectId,auditReqDto.PageNumber,auditReqDto.PageSize);
-
             return Ok(audits);
-
         }
     }
 }
