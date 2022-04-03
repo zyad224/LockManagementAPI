@@ -70,7 +70,7 @@ namespace LockManagementAPI.Controllers
         /// LockCommand (For ALL Users with JWTs).
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Sample request: 
         /// 
         ///     POST api/Lock/LockCommand
         ///     {        
